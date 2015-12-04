@@ -58,6 +58,7 @@
   <ItemGroup>
     <Folder Include="MediaButler.WatcherContent\" />
     <Folder Include="MediaButler.WorkflowContent\" />
+    <Folder Include="Profiles" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="MediaButler.WatcherContent\diagnostics.wadcfg">
@@ -66,6 +67,9 @@
     <Content Include="MediaButler.WorkflowContent\diagnostics.wadcfg">
       <SubType>Content</SubType>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <PublishProfile Include="Profiles\B42CsSaDemo1Production.azurePubxml" />
   </ItemGroup>
   <!-- Import the target files for this project template -->
   <PropertyGroup>

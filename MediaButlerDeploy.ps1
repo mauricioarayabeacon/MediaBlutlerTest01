@@ -1,14 +1,14 @@
 
 #Azure Subscription
-$azureSubscriptionName="[your subscription name]"
+$azureSubscriptionName="B42MediaServices"
 #Media Butler Storage Account Name
-$butlerStorageAccountName="[your butler Storage AccountName]"
+$butlerStorageAccountName="b42butlerstorage2"
 #Media Servives Account Name
-$MediaServiceAccountName="[your AMS account name]"
+$MediaServiceAccountName="amstestbeacon4201"
 #Media Services Account Key
-$PrimaryMediaServiceAccessKey="[your AMS Primary key]"
+$PrimaryMediaServiceAccessKey="7/5Vo9jCewO8fAj7u/9A6Ro0aPpZk0x2Fs2zEnUkVrs="
 #Media Services Storage Account Connection string
-$MediaStorageConn="[your Storage Account connection string]"
+$MediaStorageConn="DefaultEndpointsProtocol=https;AccountName=amstestbeacon42storage;AccountKey=ngduT9Ejj9ZvsR3DqIu+xo314h+CkXULo461PyLy59a71ONZMAZHPBJUIsBM+MhbBXT4/+t3QiVXm5TBvNly3Q=="
 #[Optional] Send Grid configuration, if you don't use Sendgrig keep empty string
 #Example "{ ""UserName"":""xxxxxxxxxxx@azure.com"", ""Pswd"":""xxxxxxxxxxx"", ""To"":""admin@yourdomain.com"", ""FromName"": ""Butler Media Framework"", ""FromMail"": ""butler@media.com"" }"
 $SendGridStepConfig=""
