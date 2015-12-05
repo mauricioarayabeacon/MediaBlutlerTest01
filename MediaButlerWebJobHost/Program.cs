@@ -7,6 +7,7 @@ using Microsoft.Azure.WebJobs;
 using System.IO;
 using System.Threading;
 using MediaButler.Common.HostWatcher;
+using System.Diagnostics;
 
 namespace MediaButlerWebJobHost
 {
@@ -23,8 +24,24 @@ namespace MediaButlerWebJobHost
 
             return System.Configuration.ConfigurationSettings.AppSettings["MediaButler.ConfigurationStorageConnectionString"];
         }
+        private static string GetAddListenerValue()
+        {
+            return System.Configuration.ConfigurationSettings.AppSettings["MediaButler.AddConsoleListener"];
+        }
+
         static void Main()
         {
+
+            // Add a Console Trace Listener to enable logging to Azure WebJob Dashboard
+            ConsoleTraceListener consoleTracer = null;
+            var addListenerValue = GetAddListenerValue();
+            if (addListenerValue == "true")
+            {
+                consoleTracer = new ConsoleTraceListener();
+                consoleTracer.Name = "mainConsoleTracer";
+                Trace.Listeners.Add(consoleTracer);
+                Trace.TraceInformation("Console Tracer initialized");
+            }
 
             JobHostConfiguration config = new JobHostConfiguration();
             config.StorageConnectionString = GetConnString();
@@ -33,6 +50,11 @@ namespace MediaButlerWebJobHost
             host.CallAsync(typeof(Program).GetMethod("RunMediaButlerWorkflow"));
             host.CallAsync(typeof(Program).GetMethod("RunMediaButlerWatcher"));
             host.RunAndBlock();
+
+            if (addListenerValue == "true")
+            {
+                consoleTracer.Close();
+            }
         }
         private static void Setup(string ConfigurationStorageConnectionString)
         {
@@ -54,7 +76,7 @@ namespace MediaButlerWebJobHost
             MediaButler.Common.Host.MediaButlerHost xHost = new MediaButler.Common.Host.MediaButlerHost(myConfigData);
 
             await xHost.ExecuteAsync(cancellationTokenSource.Token);
-       
+
 
         }
 
@@ -63,7 +85,7 @@ namespace MediaButlerWebJobHost
         {
             MediaButlerWatcherHost XHost = new MediaButlerWatcherHost(GetConnString());
             await XHost.Run();
-          
+
         }
     }
 }
