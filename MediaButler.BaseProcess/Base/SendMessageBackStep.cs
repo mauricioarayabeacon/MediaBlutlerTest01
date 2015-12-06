@@ -45,6 +45,11 @@ namespace MediaButler.BaseProcess
             IAsset x = _MediaServiceContext.Assets.Where(xx => xx.Id == myRequest.AssetId).FirstOrDefault();
             AssetInfo ai = new AssetInfo(x);
             StringBuilder AssetInfoResume = ai.GetStatsTxt();
+            AssetInfoResume.AppendLine("");
+            AssetInfoResume.AppendLine("-- THUMBNAILS BELOW --");
+            IAsset y = myRequest.ThumbNailAsset;
+            AssetInfo ay = new AssetInfo(y);
+            AssetInfoResume.Append(ay.GetStatsTxt().ToString());
 
             AssetInfoResume.AppendLine("");
             AssetInfoResume.AppendLine("Media Butler Process LOG " + DateTime.Now.ToString());

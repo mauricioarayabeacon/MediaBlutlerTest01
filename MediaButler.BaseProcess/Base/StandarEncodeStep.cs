@@ -100,7 +100,19 @@ namespace MediaButler.BaseProcess
             // Specify the input asset to be converted.
             task.InputAssets.Add(assetToConvert);
             // Add an output asset to contain the results of the job.
-            task.OutputAssets.AddNew(assetToConvert.Name+"_mb", AssetCreationOptions.None);
+            task.OutputAssets.AddNew(assetToConvert.Name + "_mb", AssetCreationOptions.None);
+
+            // Create a task with the thumbnail generation
+            string xmlThumbProfile = "Thumbnails.xml";
+            string configMp4Thumbnails = LoadEncodeProfile(xmlThumbProfile);
+            ITask thumbtask = currentJob.Tasks.AddNew("Task profile " + xmlThumbProfile,
+                processor,
+                configMp4Thumbnails,
+                TaskOptions.None);
+            thumbtask.InputAssets.Add(assetToConvert);
+            thumbtask.OutputAssets.AddNew(assetToConvert.Name + "thumb", AssetCreationOptions.None);
+            
+  
             // Use the following event handler to check job progress. 
             // The StateChange method is the same as the one in the previous sample
             //currentJob.StateChanged += new EventHandler<JobStateChangedEventArgs>(StateChanged);
@@ -127,6 +139,8 @@ namespace MediaButler.BaseProcess
 
             //Update AssetID
             myRequest.AssetId = currentJob.OutputMediaAssets.FirstOrDefault().Id;
+            // Update ThumbNailAsset
+            myRequest.ThumbNailAsset = currentJob.OutputMediaAssets[1];
         }
         public override void HandleCompensation(Common.workflow.ChainRequest request)
         {

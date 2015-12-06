@@ -120,6 +120,8 @@ namespace MediaButler.BaseProcess
                 MessageHiddenControl = false;
             }
         }
+
+        public IAsset ThumbNailAsset { get; set; } = null;
         public string AssetId { get; set; }
         public MediaButler.Common.ButlerRequest ButlerRequest
         { get
@@ -180,7 +182,7 @@ namespace MediaButler.BaseProcess
         }
         public ButlerProcessRequest()
         {
-            
+      
         }
         /// <summary>
         /// Dispose the TASK for keepMessage Hidden!
