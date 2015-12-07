@@ -560,6 +560,14 @@ namespace MediaButler.Common
                                     mp4Uri.Path += "/" + assetfilemp4.Name;
                                     sb.AppendLine(mp4Uri.ToString());
                                 }
+                                //  Append the uri's of the jpg files
+                                var jpgFiles = assetFilesALL.Where(f => f.Name.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase)).ToList();
+                                var jpgPrefix = locator.Path.Substring(0, locator.Path.IndexOf("?"));
+                                var jpgPostFix = locator.Path.Substring(locator.Path.IndexOf("?"));
+                                foreach (var assetfilejpg in jpgFiles)
+                                {
+                                    sb.AppendLine(jpgPrefix + "/" + assetfilejpg.Name + jpgPostFix);
+                                }
                             }
                             sb.AppendLine("");
                             sb.AppendLine("==============================================================================");
