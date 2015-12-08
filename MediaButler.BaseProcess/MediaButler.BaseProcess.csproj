@@ -115,6 +115,7 @@
     <Compile Include="Base\IngestMultiMezzamineFilesStep.cs" />
     <Compile Include="Base\SendMessageBackStep.cs" />
     <Compile Include="Base\StandarEncodeStep.cs" />
+    <Compile Include="ServiceBus\ExtendedDataAsset.cs" />
     <Compile Include="ServiceBus\ExportDataAsset.cs" />
     <Compile Include="ServiceBus\SendServiceBusTopicStep.cs" />
     <Compile Include="ServiceBus\ServiceBusData.cs" />
