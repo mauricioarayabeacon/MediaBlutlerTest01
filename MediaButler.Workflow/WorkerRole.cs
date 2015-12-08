@@ -109,10 +109,10 @@ namespace MediaButler.Workflow
             return (myConfigData.MaxDequeueCount < theMessage.DequeueCount);
         }
         /// <summary>
-        /// Send back to watcher a "Posion messsage" and delete from in queue
+        /// Send back to watcher a "Poison messsage" and delete from in queue
         /// </summary>
         /// <param name="poisonMessage">the poison message</param>
-        /// <returns>Sueccess or not</returns>
+        /// <returns>Success</returns>
         private bool SendPoisonMessage(CloudQueueMessage poisonMessage)
         {
             bool sw = false;
