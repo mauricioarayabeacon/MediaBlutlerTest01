@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 namespace MediaButler.BaseProcess
 {
    
-    class StandarEncodeStep:MediaButler.Common.workflow.StepHandler
+    class GenerateThumbNailsStep:MediaButler.Common.workflow.StepHandler
     {
         private ButlerProcessRequest myRequest;
         private CloudMediaContext _MediaServicesContext;
@@ -64,43 +64,31 @@ namespace MediaButler.BaseProcess
             }
             return auxProfile;
         }
-        private  void  ConvertMP4toSmooth(IAsset assetToConvert)
+        private  void  GenerateThumbNails(IAsset assetToConvert)
         {
             //0 Helper
             IEncoderSupport myEncodigSupport = new EncoderSupport(_MediaServicesContext);
-
-            string xmlEncodeProfile = "H264 Adaptive Bitrate MP4 Set 1080p.xml";
-            //if (this.StepConfiguration != null)
-            if (!string.IsNullOrEmpty(this.StepConfiguration))
-            {
-                //TODO:support storage and LABEL
-                xmlEncodeProfile = this.StepConfiguration;
-            }
-            else
-            {
-                string txt = string.Format("StandarEncodeStep try to read StepConfiguration but it is not in configuration table! at {0} ",  DateTime.Now.ToString());
-                Trace.TraceWarning(txt);
-            }
+  
             // Declare a new job to contain the tasks
-            currentJob = _MediaServicesContext.Jobs.Create("Convert to Smooth Streaming job " +  myAssetOriginal.Name);
+            currentJob = _MediaServicesContext.Jobs.Create("Generate ThumbNails for" +  myAssetOriginal.Name);
 
-            // Set up the first Task to convert from MP4 to Smooth Streaming. 
-            // Read in task configuration XML
-            string configMp4ToSmooth = LoadEncodeProfile(xmlEncodeProfile);
-            
             // Get a media packager reference
-            //IMediaProcessor processor = GetLatestMediaProcessorByName("Windows Azure Media Encoder");
             IMediaProcessor processor = myEncodigSupport.GetLatestMediaProcessorByName("Windows Azure Media Encoder");
             
-            // Create a task with the conversion details, using the configuration data
-            ITask task = currentJob.Tasks.AddNew("Task profile " + xmlEncodeProfile,
-                   processor,
-                   configMp4ToSmooth,
-                   TaskOptions.None);
-            // Specify the input asset to be converted.
-            task.InputAssets.Add(assetToConvert);
-            // Add an output asset to contain the results of the job.
-            task.OutputAssets.AddNew(assetToConvert.Name + "_mb", AssetCreationOptions.None);
+            // Create a task with the thumbnail generation
+            string xmlThumbProfile = "Thumbnails.xml";
+            if (!string.IsNullOrEmpty(this.StepConfiguration)) // If there is a StepConfiguration 
+            {
+                xmlThumbProfile= this.StepConfiguration;
+            }
+
+            string configMp4Thumbnails = LoadEncodeProfile(xmlThumbProfile);
+            ITask thumbtask = currentJob.Tasks.AddNew("Task profile " + xmlThumbProfile,
+                processor,
+                configMp4Thumbnails,
+                TaskOptions.None);
+            thumbtask.InputAssets.Add(assetToConvert);
+            thumbtask.OutputAssets.AddNew(assetToConvert.Name + "_thumb", AssetCreationOptions.None);
 
             // Use the following event handler to check job progress. 
             // The StateChange method is the same as the one in the previous sample
@@ -124,10 +112,10 @@ namespace MediaButler.BaseProcess
 
             myAssetOriginal = (from m in _MediaServicesContext.Assets select m).Where(m => m.Id == myRequest.AssetId).FirstOrDefault();
             
-            ConvertMP4toSmooth(myAssetOriginal);
-
-            //Update AssetID
-            myRequest.AssetId = currentJob.OutputMediaAssets.FirstOrDefault().Id;
+            GenerateThumbNails(myAssetOriginal);
+            
+            // Update ThumbNailAsset
+            myRequest.ThumbNailAsset = currentJob.OutputMediaAssets.FirstOrDefault();
         }
         public override void HandleCompensation(Common.workflow.ChainRequest request)
         {

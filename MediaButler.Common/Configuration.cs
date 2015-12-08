@@ -111,6 +111,9 @@ namespace MediaButler.Common
         public const string ButlerExternalInfoContainer = "mediabutlerbin";
         public const string ButlerWorkflowStatus = "ButlerWorkflowStatus";
 
+        public const int daysForWhichStreamingUrlIsActive = 720;
+        public const int daysForWhichSasUrlIsActive = 720;
+
         public const int maxDequeueCount = 3;
         /// <summary>
         /// Get the configuration Value from the configuration Table. Response is a JSON format

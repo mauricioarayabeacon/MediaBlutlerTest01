@@ -1,4 +1,5 @@
-﻿using Microsoft.WindowsAzure.MediaServices.Client;
+﻿using MediaButler.Common;
+using Microsoft.WindowsAzure.MediaServices.Client;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -18,12 +19,12 @@ namespace MediaButler.BaseProcess
             IAssetFile assetFile = null;
             ILocator locator = null;
 
-            var daysForWhichStreamingUrlIsActive = 365;
+       
             var outputAsset = _MediaServiceContext.Assets.Where(a => a.Id == outputAssetid).FirstOrDefault();
             
             var accessPolicy = _MediaServiceContext.AccessPolicies.Create(
                 outputAsset.Name
-                , TimeSpan.FromDays(daysForWhichStreamingUrlIsActive)
+                , TimeSpan.FromDays(Configuration.daysForWhichStreamingUrlIsActive)
                 , AccessPermissions.Read);
             var assetFiles = outputAsset.AssetFiles.ToList();
 

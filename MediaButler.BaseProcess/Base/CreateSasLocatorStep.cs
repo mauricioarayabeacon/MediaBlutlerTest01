@@ -1,4 +1,5 @@
-﻿using Microsoft.WindowsAzure.MediaServices.Client;
+﻿using MediaButler.Common;
+using Microsoft.WindowsAzure.MediaServices.Client;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -17,11 +18,10 @@ namespace MediaButler.BaseProcess
         private void buildlocator()
         {
             myAsset = _MediaServiceContext.Assets.Where(xx => xx.Id == myRequest.AssetId).FirstOrDefault();
-            var daysForWhichStreamingUrlIsActive = 365;
-
+         
             var accessPolicy = _MediaServiceContext.AccessPolicies.Create(
                 myAsset.Name
-                , TimeSpan.FromDays(daysForWhichStreamingUrlIsActive)
+                , TimeSpan.FromDays(Configuration.daysForWhichSasUrlIsActive)
                 , AccessPermissions.Read);
 
             _MediaServiceContext.Locators.CreateLocator(LocatorType.Sas, myAsset, accessPolicy, DateTime.UtcNow.AddMinutes(-5));
@@ -29,19 +29,7 @@ namespace MediaButler.BaseProcess
             // Build Locator for jpg files
             IAsset thumbnailAsset =  myRequest.ThumbNailAsset;
             ILocator locator = _MediaServiceContext.Locators.CreateLocator(LocatorType.Sas, thumbnailAsset, accessPolicy);
-            // TODO: remove from here
-            var jpgFiles = thumbnailAsset.AssetFiles.ToList().
-               Where(f => f.Name.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase));
-
-            // As a result, a set of thumbnails at 10%, 20%, …, 90% along 
-            // the source timeline were generated.
-            foreach (var jpg in jpgFiles)
-            {
-                UriBuilder ub = new UriBuilder(locator.Path);
-                ub.Path += "/" + jpg.Name;
-                Console.WriteLine(ub.Uri.ToString());
-            }
-            // tohere
+           
         }
         public override void HandleExecute(Common.workflow.ChainRequest request)
         {

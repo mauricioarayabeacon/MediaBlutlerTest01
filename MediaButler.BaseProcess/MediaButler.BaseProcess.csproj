@@ -90,6 +90,7 @@
     <Compile Include="Base\CreateSasLocatorStep.cs" />
     <Compile Include="Base\DeleteOriginalBlobStep.cs" />
     <Compile Include="Base\SetupAMSAccountStep.cs" />
+    <Compile Include="Base\GenerateThumbNailsStep.cs" />
     <Compile Include="PremiunEncoder\PremiunConfig.cs" />
     <Compile Include="PremiunEncoder\PremiunEncoderStep.cs" />
     <Compile Include="Protection\EnableAESEncryptionStep.cs" />
