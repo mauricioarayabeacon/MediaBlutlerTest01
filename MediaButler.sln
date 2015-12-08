@@ -7,6 +7,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MediaButlerInstall", "Media
 	ProjectSection(SolutionItems) = preProject
 		MediaButlerDeploy-Dec2015.ps1 = MediaButlerDeploy-Dec2015.ps1
 		MediaButlerDeploy.ps1 = MediaButlerDeploy.ps1
+		docs\Vod_Configuration_Beacon42.docx = docs\Vod_Configuration_Beacon42.docx
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4AE42AE7-1528-4BB3-AAE2-A7558407B58E}"
@@ -42,6 +43,12 @@ EndProject
 Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "MediaButler.AllinOne", "MediaButler.AllinOne\MediaButler.AllinOne.ccproj", "{48BD2B05-17B2-41A5-9A0E-89243F9AAEC2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaButlerWebJobHost", "MediaButlerWebJobHost\MediaButlerWebJobHost.csproj", "{FE430805-7A07-45D4-BD47-1560C42FAD83}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MediaSamples", "MediaSamples", "{8F40CABD-C6D6-46BC-9AD9-BFE3F06291B0}"
+	ProjectSection(SolutionItems) = preProject
+		RO_2015_S01E01_Champ_Champi_Main_0000_Championship 2015 BigBuck Bunny.mp4 = RO_2015_S01E01_Champ_Champi_Main_0000_Championship 2015 BigBuck Bunny.mp4
+		RO_2015_S01E02_Champ_Champi_Main_0000_Championship 2015 CloudBerry Bunny.mp4 = RO_2015_S01E02_Champ_Champi_Main_0000_Championship 2015 CloudBerry Bunny.mp4
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

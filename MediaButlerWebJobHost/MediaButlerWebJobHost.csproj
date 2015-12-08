@@ -84,8 +84,7 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-    <None Include="Properties\PublishProfiles\MediaButlerWebJobHost20151204012626 - Web Deploy.pubxml" />
-    <None Include="Properties\PublishProfiles\MediaButlerWebJobHost20151204090020 - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\MediaButlerWebJobHost20151208081207 - Web Deploy.pubxml" />
     <None Include="Properties\webjob-publish-settings.json" />
   </ItemGroup>
   <ItemGroup>
