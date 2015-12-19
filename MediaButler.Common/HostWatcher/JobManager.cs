@@ -82,10 +82,25 @@ namespace MediaButler.Common.HostWatcher
                     TimeStampUTC = String.Format("{0:o}", DateTime.Now.ToUniversalTime()),
                     ControlFileUri = ""
                 };
+                // We always need a WorkflowName so if no media files
+                // and we do have a control file, we should obtain the
+                // workflow name from control file
                 if (j.JobMediaFiles.Count > 0)
                 {
                     var blob = new CloudBlockBlob(j.JobMediaFiles[0]);
                     message.WorkflowName = blob.Container.Name;
+                }
+                else
+                {
+                    if (j.JobControlFile != null)
+                    {
+                        var blob = new CloudBlockBlob(new Uri(j.JobControlFile.AbsoluteUri));
+                        message.WorkflowName = blob.Container.Name;
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException("No files were found to process and assign workflow name. Cancelling execution, job:" + j.JobId.ToString());
+                    }
                 }
                 foreach (Uri blobUri in j.JobMediaFiles)
                 {
