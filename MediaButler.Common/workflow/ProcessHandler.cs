@@ -35,7 +35,7 @@ namespace MediaButler.Common.workflow
         private string ReadChainConfig(string processTypeId)
         {
             string jsonConfig;
-            jsonConfig = MediaButler.Common.Configuration.GetConfigurationValue(processTypeId + ".ChainConfig", this.GetType().FullName, myProcessConfigConn);
+            jsonConfig = MediaButler.Common.Configuration.GetConfigurationValue(processTypeId + Configuration.StringConstants.workflowConfigSuffix, Configuration.StringConstants.workflowConfigType, myProcessConfigConn);
             return jsonConfig;
         }
         /// <summary>
@@ -153,6 +153,7 @@ namespace MediaButler.Common.workflow
         private void execute(CloudQueueMessage currentMessage)
         {
             ProcessRequest myRequest=null;
+            MediaButler.Common.ButlerRequest watcherRequest = null;
             string txt;
             try
             {
@@ -160,7 +161,7 @@ namespace MediaButler.Common.workflow
                 {
                     currentProcessRunning += 1;
                 }
-                MediaButler.Common.ButlerRequest watcherRequest = Newtonsoft.Json.JsonConvert.DeserializeObject<ButlerRequest>(currentMessage.AsString);
+                watcherRequest = Newtonsoft.Json.JsonConvert.DeserializeObject<ButlerRequest>(currentMessage.AsString);
                 List<StepHandler> mysteps = BuildChain(watcherRequest.WorkflowName);
                 myRequest = GetCurrentContext(watcherRequest.WorkflowName);
                 myRequest.CurrentMessage = currentMessage;
@@ -212,6 +213,14 @@ namespace MediaButler.Common.workflow
             //3.return control
             if (myRequest != null)
             {
+                // Si el workflow name es un guid es un workflow dinámico
+                Guid resultParse;
+                if (Guid.TryParse(watcherRequest.WorkflowName, out resultParse))
+                {
+                    string dynWorkflowName = watcherRequest.WorkflowName;
+                    MediaButler.Common.Configuration.DeleteConfigurationValue(dynWorkflowName + Configuration.StringConstants.contextConfigSuffix, Configuration.StringConstants.workflowConfigType);
+                    MediaButler.Common.Configuration.DeleteConfigurationValue(dynWorkflowName + Configuration.StringConstants.workflowConfigSuffix, Configuration.StringConstants.workflowConfigType);
+                }
                 myRequest.DisposeRequest();
             } else
             {

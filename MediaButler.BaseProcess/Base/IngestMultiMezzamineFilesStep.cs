@@ -78,10 +78,30 @@ namespace MediaButler.BaseProcess
             CloudBlobClient assetClient = assetStorageCount.CreateCloudBlobClient();
             CloudBlobContainer assetContainer = assetClient.GetContainerReference(currentAsset.Uri.Segments[1]);
 
+
             //Mezzamine Storage
             CloudStorageAccount MezzamineStorageCount = CloudStorageAccount.Parse(myRequest.ButlerRequest.StorageConnectionString);
             CloudBlobClient MezzamineClient = MezzamineStorageCount.CreateCloudBlobClient();
-            CloudBlobContainer MezzamineContainer = MezzamineClient.GetContainerReference(myRequest.ButlerRequest.WorkflowName);
+            string mezzanineContainerStringRef;
+            if (myRequest.ButlerRequest.MezzanineFiles.Count > 0)
+            {
+                Uri mezzUri = new Uri(myRequest.ButlerRequest.MezzanineFiles[0]);
+                mezzanineContainerStringRef = mezzUri.Segments[1].Replace("/", "");
+            }
+            else
+            {
+                if (!String.IsNullOrEmpty(myRequest.ButlerRequest.ControlFileUri))
+                {
+                    Uri mezzUri = new Uri(myRequest.ButlerRequest.ControlFileUri);
+                    mezzanineContainerStringRef = mezzUri.Segments[1].Replace("/", "");
+                }
+                else
+                {
+                    mezzanineContainerStringRef = myRequest.ButlerRequest.WorkflowName;
+                }
+            }
+
+            CloudBlobContainer MezzamineContainer = MezzamineClient.GetContainerReference(mezzanineContainerStringRef);
 
             foreach (string  urlMezzamineFile in myRequest.ButlerRequest.MezzanineFiles)
             {

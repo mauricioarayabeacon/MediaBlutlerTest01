@@ -17,7 +17,10 @@ namespace MediaButler.Common
         public Uri JobControlFile { get; set; }
 
         public Configuration.WorkflowStatus Status { get; set; }
-
+        /// <summary>
+        /// Workflow associated to this job. Can be fixed or dynamic (provided in controlfile)
+        /// </summary>
+        public string WorkflowName { get; set; }
         /// <summary>
         /// contains information to dump in the .log file
         /// </summary>

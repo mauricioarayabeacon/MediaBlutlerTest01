@@ -92,6 +92,17 @@ namespace MediaButler.Common
         }
 
         /// <summary>
+        /// Contain string constants for the applicatino
+        /// </summary>
+        public class StringConstants
+        {
+            public const string contextConfigSuffix = ".Context";
+            public const string standardContextConfiguration = "{\"AssemblyName\":\"MediaButler.BaseProcess.dll\",\"TypeName\":\"MediaButler.BaseProcess.ButlerProcessRequest\",\"ConfigKey\":\"\"}";
+            public const string workflowConfigSuffix = ".ChainConfig";
+            public const string workflowConfigType = "MediaButler.Common.workflow.ProcessHandler";
+        }
+
+        /// <summary>
         /// Directory naming conventions for blobs in the drop container. 
         /// e.g. /<container>/Incoming/a.mp4 or /Incoming/21B248D8-FCA8-4343-A254-2827AA28E34C/a.mp4
         /// Used in JobCreator and BlobWatcher.
@@ -200,6 +211,35 @@ namespace MediaButler.Common
                 // Execute the insert operation.
                 TableResult insertResult = configTable.Execute(insertOperation);
                 if (insertResult == null)
+                    result = false;
+
+            }
+            catch (Exception ex)
+            {
+                result = false;
+                throw ex;
+            }
+
+            return result;
+        }
+
+        public static bool DeleteConfigurationValue(string configKey, string processKey)
+        {
+            bool result = true;
+            try
+            {
+                string storageAccountString = CloudConfigurationManager.GetSetting(butlerStorageConnectionConfigurationKey);
+                CloudStorageAccount account = CloudStorageAccount.Parse(storageAccountString);
+                CloudTableClient tableClient = account.CreateCloudTableClient();
+                CloudTable configTable = tableClient.GetTableReference(configurationTableName);
+                ButlerConfigurationEntity configEntity = new ButlerConfigurationEntity(configKey, processKey);
+                configEntity.ETag = "*";
+                // Create the TableOperation that inserts the customer entity.
+                TableOperation deleteOperation = TableOperation.Delete(configEntity);
+
+                // Execute the delete operation.
+                TableResult deleteResult = configTable.Execute(deleteOperation);
+                if (deleteResult == null)
                     result = false;
 
             }

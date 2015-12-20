@@ -53,7 +53,7 @@ namespace MediaButler.Common.workflow
                 //Execute step logic
                 TraceMessge = string.Format("[{2}] Start Step {0} at process instance {1}", this.GetType().FullName, request.ProcessInstanceId,request.ProcessTypeId);
                 Trace.TraceInformation(TraceMessge);
-                this.HandleExecute(request);
+                    this.HandleExecute(request);
                 TraceMessge = string.Format("[{2}] Finish Step {0} at process instance {1}", this.GetType().FullName, request.ProcessInstanceId, request.ProcessTypeId);
                 Trace.TraceInformation(TraceMessge);
             }

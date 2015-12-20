@@ -1,16 +1,16 @@
 
 #Azure Subscription
-$azureSubscriptionName="BizSpark"
+$azureSubscriptionName="MyIdealSpot"
 #Media Servives Account Name
-$MediaServiceAccountName="amsdevcc01"
+$MediaServiceAccountName="amsgcdevidealspot"
 #Media Services Account Key
-$PrimaryMediaServiceAccessKey="Kb9mtFbLviC1hv1c9LSyc3bkTvQoKYh9CITrJCG7iLY="
+$PrimaryMediaServiceAccessKey="84jfi5pVaJ70YyxPC+yiiUpBaiP0+IKIQIzVE7VnNc0="
 #Media Butler Storage Account Name
-$butlerStorageAccountName="amsdevcc01stor"
+$butlerStorageAccountName="amsgcdevidealspotstor"
 #Media Services Storage Account Connection string
-$MediaStorageConn="DefaultEndpointsProtocol=https;AccountName=amsdevcc01stor;AccountKey=M3OlycdXU/VfJl0dWVmCnY/cys6wje9vmQpoDfw1x0fg5cERnTwSZ7aSa3xWmVgCygFlZSAsIf5+Fw9a75QsXQ=="
+$MediaStorageConn="DefaultEndpointsProtocol=https;AccountName=amsgcdevidealspotstor;AccountKey=zvNiNxG8wpseFlfJzLsHye18+bA9eyWyaLMPTGGDK77LtPmDu1ODyaHkh5pgroolg6K+LJqgVvoaBT4Iig4ZOg=="
 #Service Bus topic definition
-$ServiceBusConnection="{""connectionString"": ""Endpoint=sb://dev01cc.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=qPlf/CRT1KtqjYmmnUlC9m9Fx//ZpsbWueZhnfIUfY8="",""topicText"": ""Caballos-Topic"", ""SubscriptionName"": ""CaballosSubscription""}"
+$ServiceBusConnection="{""connectionString"": ""Endpoint=sb://devccidealspot.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=aHPqzPXCcV2phykgvEsgJTNXZfGp+pnUfwTxAtm/uhk="",""topicText"": ""Caballos-Topic"", ""SubscriptionName"": ""CaballosSubscription""}"
 #[Optional] Send Grid configuration, if you don't use Sendgrig keep empty string
 #Example "{ ""UserName"":""xxxxxxxxxxx@azure.com"", ""Pswd"":""xxxxxxxxxxx"", ""To"":""admin@yourdomain.com"", ""FromName"": ""Butler Media Framework"", ""FromMail"": ""butler@media.com"" }"
 $SendGridStepConfig=""

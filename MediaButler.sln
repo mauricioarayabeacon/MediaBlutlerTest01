@@ -50,6 +50,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MediaSamples", "MediaSample
 		RO_2015_S01E02_Champ_Champi_Main_0000_Championship 2015 CloudBerry Bunny.mp4 = RO_2015_S01E02_Champ_Champi_Main_0000_Championship 2015 CloudBerry Bunny.mp4
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Incoming", "Incoming", "{6F63383B-758B-4D75-A410-13288D452A31}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "B5261A78-3B92-406B-8D9D-38E195916376", "B5261A78-3B92-406B-8D9D-38E195916376", "{9DE7AE13-B14F-49B5-BD9B-91CB0F987F12}"
+	ProjectSection(SolutionItems) = preProject
+		Incoming\B5261A78-3B92-406B-8D9D-38E195916376\ContinueProcess.control = Incoming\B5261A78-3B92-406B-8D9D-38E195916376\ContinueProcess.control
+		Incoming\B5261A78-3B92-406B-8D9D-38E195916376\RO_2015_S01E01_Champ_Champi_Main_0000_Championship 2015 BigBuck Bunny.mp4 = Incoming\B5261A78-3B92-406B-8D9D-38E195916376\RO_2015_S01E01_Champ_Champi_Main_0000_Championship 2015 BigBuck Bunny.mp4
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -89,6 +97,8 @@ Global
 		{4EFFF6FD-F5F2-4ED8-9A6E-C7EFAA05393D} = {065927B4-E021-4A1D-BDD8-F5319580D478}
 		{48BD2B05-17B2-41A5-9A0E-89243F9AAEC2} = {065927B4-E021-4A1D-BDD8-F5319580D478}
 		{FE430805-7A07-45D4-BD47-1560C42FAD83} = {065927B4-E021-4A1D-BDD8-F5319580D478}
+		{6F63383B-758B-4D75-A410-13288D452A31} = {8F40CABD-C6D6-46BC-9AD9-BFE3F06291B0}
+		{9DE7AE13-B14F-49B5-BD9B-91CB0F987F12} = {6F63383B-758B-4D75-A410-13288D452A31}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		EnterpriseLibraryConfigurationToolBinariesPath = packages\TransientFaultHandling.Core.5.1.1209.1\lib\NET4

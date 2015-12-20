@@ -1,5 +1,6 @@
 ﻿using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -42,8 +43,8 @@ namespace MediaButler.Common.HostWatcher
                     //TODO: check for copy failure
                     var newBlobUri = cbc.GetBlockBlobReference(newName).Uri;
 
-                    // 1. have jobcreator create the job for this (now renamed) file
-                    var j = JobManager.CreateSimpleJob(newBlobUri);
+                    // 2. Create simple job with one file and workflow name based on container name
+                    var j = JobManager.CreateSimpleJob(newBlobUri, cbc.Name);
 
                     Trace.TraceInformation(String.Format("Submitting job: {0} at {1:o} (Simple)", j.JobId, DateTime.UtcNow));
 
@@ -132,13 +133,59 @@ namespace MediaButler.Common.HostWatcher
                     }
                 }
 
+                // We always need a workflowname
+                // If a workflow is provided inside the .control file use it
+                // otherwise associate the workflow name to the container
+                string obtainedWorkflowName = ObtainWorkflowName(cbc, jobControl);
+                
                 // Create & Submit the job for processing
-                var job = JobManager.CreateJob(jobMediaFiles, jobControl);
+                var job = JobManager.CreateJob(jobMediaFiles, jobControl, obtainedWorkflowName );
 
                 Trace.TraceInformation(String.Format("Submitting job: {0} at {1:o}", job.JobId, DateTime.UtcNow));
                 // JobManager.Submit(job);
                 JobManager.Submit(job,_storageAccountString);
             }
+        }
+
+        /// <summary>
+        /// Obtain workflow name based on the control file
+        /// If the control file contains a "WorkflowDefinition" node is a dynamic workflow
+        /// so we will create a new workflow (writing in the configuration table)
+        /// and submit it. Otherwise, we use the container name.
+        /// </summary>
+        /// <param name="cbc">Cloud Blob Container where files are located</param>
+        /// <param name="jobControlFileUri">Uri to the job control file</param>
+        /// <returns></returns>
+        private static string ObtainWorkflowName(CloudBlobContainer cbc, Uri jobControlFileUri)
+        {
+            // Obtain the json string of the .control file
+            string controlFilename = jobControlFileUri.Segments[2] + jobControlFileUri.Segments[3] + jobControlFileUri.Segments[4];
+            string jsonstr = cbc.GetBlockBlobReference(controlFilename).DownloadText();
+            // Deserialize json and verify if there is a "WorkflowDefinition" section
+            dynamic dynObj = JsonConvert.DeserializeObject(jsonstr);
+            string strWorkflowDefinition = "";
+            if (dynObj.WorkflowDefinition != null)
+            {
+                strWorkflowDefinition = dynObj.WorkflowDefinition;
+            }
+            if (string.IsNullOrEmpty(strWorkflowDefinition)) // No dynamic workflow definition
+            {
+                return cbc.Name;
+            }
+            else
+            {
+                return CreateDynamicWorkflow(strWorkflowDefinition);
+            }
+        }
+
+        private static string CreateDynamicWorkflow(string strWorkflowDefinition)
+        {
+            // Obtain a new name for the workflow
+            string dynWorkflowName = Guid.NewGuid().ToString();
+            // Write the .Context and .ChainConfig values to the Table
+            MediaButler.Common.Configuration.SetConfigurationValue(dynWorkflowName + Configuration.StringConstants.contextConfigSuffix, Configuration.StringConstants.workflowConfigType, Configuration.StringConstants.standardContextConfiguration);
+            MediaButler.Common.Configuration.SetConfigurationValue(dynWorkflowName + Configuration.StringConstants.workflowConfigSuffix, Configuration.StringConstants.workflowConfigType, strWorkflowDefinition);
+            return dynWorkflowName;
         }
 
         private const string parentSuffix = "/" + Configuration.DirectoryInbound + "/";

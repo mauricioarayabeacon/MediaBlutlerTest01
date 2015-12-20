@@ -2,6 +2,7 @@
 using Microsoft.WindowsAzure.Storage.Blob;
 using Microsoft.WindowsAzure.Storage.Queue;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -21,12 +22,13 @@ namespace MediaButler.Common.HostWatcher
         /// <param name="mediaAssets">The list of mezannine Assets</param>
         /// <param name="controlFile">Butler control file.</param>
         /// <returns>the new Butler job object</returns>
-        public static ButlerJob CreateJob(IList<Uri> mediaAssets, Uri controlFile)
+        public static ButlerJob CreateJob(IList<Uri> mediaAssets, Uri controlFile, string workflowName)
         {
             var b = new ButlerJob()
             {
                 JobControlFile = controlFile,
                 JobMediaFiles = mediaAssets,
+                WorkflowName = workflowName
             };
             return b;
         }
@@ -38,12 +40,13 @@ namespace MediaButler.Common.HostWatcher
         /// <param name="mediaAsset">The Uri of the single mezannine file (e.g.,
         /// for .../Incoming/myVid.mp4).</param>
         /// <returns></returns>
-        public static ButlerJob CreateSimpleJob(Uri mediaAsset)
+        public static ButlerJob CreateSimpleJob(Uri mediaAsset, string workflowName)
         {
             var b = new ButlerJob()
             {
                 JobControlFile = null,
-                JobMediaFiles = new List<Uri>() { mediaAsset }
+                JobMediaFiles = new List<Uri>() { mediaAsset },
+                WorkflowName = workflowName
             };
             return b;
         }
@@ -78,30 +81,20 @@ namespace MediaButler.Common.HostWatcher
                     MessageId = j.JobId,
                     MezzanineFiles = new List<string> { },
                     StorageConnectionString = storageAccountString,
-                    WorkflowName = "",
+                    WorkflowName = j.WorkflowName,
                     TimeStampUTC = String.Format("{0:o}", DateTime.Now.ToUniversalTime()),
                     ControlFileUri = ""
                 };
+
                 // We always need a WorkflowName so if no media files
                 // and we do have a control file, we should obtain the
                 // workflow name from control file
-                if (j.JobMediaFiles.Count > 0)
+                if ((j.JobMediaFiles.Count == 0) && (j.JobControlFile == null))
                 {
-                    var blob = new CloudBlockBlob(j.JobMediaFiles[0]);
-                    message.WorkflowName = blob.Container.Name;
+                    throw new InvalidOperationException("No files were found to process and assign workflow name. Cancelling execution, job:" + j.JobId.ToString());
                 }
-                else
-                {
-                    if (j.JobControlFile != null)
-                    {
-                        var blob = new CloudBlockBlob(new Uri(j.JobControlFile.AbsoluteUri));
-                        message.WorkflowName = blob.Container.Name;
-                    }
-                    else
-                    {
-                        throw new InvalidOperationException("No files were found to process and assign workflow name. Cancelling execution, job:" + j.JobId.ToString());
-                    }
-                }
+
+               
                 foreach (Uri blobUri in j.JobMediaFiles)
                 {
                     message.MezzanineFiles.Add(blobUri.ToString());
