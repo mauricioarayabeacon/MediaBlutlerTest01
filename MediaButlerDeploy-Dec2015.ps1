@@ -161,7 +161,7 @@ try
         InsertButlerConfig -PartitionKey "MediaButler.Workflow.WorkerRole" -RowKey "ContainersToScan" -value $butlerContainerStageName -accountName $butlerStorageAccountName -accountKey $sKey -tableName "ButlerConfiguration"
 
         #RegEx configuration    
-	    InsertButlerConfig -PartitionKey "MediaButler.Common.workflow.ProcessHandler" -RowKey "RegExValidateFileNameStep.StepConfig" -value "{""RegExPattern"":""[a-zA-Z0-9]{2}_[0-9]{4}_S[0-9]{2}E[0-9]{2}_[a-zA-Z0-9]{5}_[a-zA-Z0-9]{6}_[a-zA-Z0-9]{4}_[0-9]{4}_[A-Za-z¡…Õ”⁄·ÈÌÛ˙Ò—$* ]{1,100}""}" -accountName $butlerStorageAccountName -accountKey $sKey -tableName "ButlerConfiguration"  
+	    InsertButlerConfig -PartitionKey "MediaButler.Common.workflow.ProcessHandler" -RowKey "RegExValidateFileNameStep.StepConfig" -value "{""RegExPattern"":""[a-zA-Z0-9]{2}_[0-9]{4}_S[0-9]{2}E[0-9]{2}_[a-zA-Z0-9]{5}_[a-zA-Z0-9]{6}_[a-zA-Z0-9]{4}_[0-9]{4}_[A-Za-z¡…Õ”⁄·ÈÌÛ˙Ò—$*0-9 ]{1,100}""}" -accountName $butlerStorageAccountName -accountKey $sKey -tableName "ButlerConfiguration"  
 
         #Service Bus configuration    
 	    InsertButlerConfig -PartitionKey "MediaButler.Common.workflow.ProcessHandler" -RowKey "ServiceBus.StepConfig" -value $ServiceBusConnection -accountName $butlerStorageAccountName -accountKey $sKey -tableName "ButlerConfiguration"  
