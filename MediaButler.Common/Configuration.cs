@@ -114,7 +114,7 @@ namespace MediaButler.Common
         public const int daysForWhichStreamingUrlIsActive = 720;
         public const int daysForWhichSasUrlIsActive = 720;
 
-        public const int maxDequeueCount = 3;
+        public const int maxDequeueCount = 1;
         /// <summary>
         /// Get the configuration Value from the configuration Table. Response is a JSON format
         /// </summary>
